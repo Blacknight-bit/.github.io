@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Valle Scala Disc Golf</title>
+</head>
+<body>
+<div class="app">
+
+    <!-- Slide 1: Player Registration -->
+    <section id="playerRegistration" class="slide active-slide">
+        <header class="header">
+            <h1>🥏 Valle Scala Disc Golf</h1>
+        </header>
+        <div class="players-section">
+            <div class="players-header">
+                <h2>Players (<span id="playerCountReg">0</span>/10)</h2>
+                <button class="btn btn-add" id="addPlayerBtnReg">+ Add Player</button>
+            </div>
+            <div id="playersListReg" class="players-list"></div>
+        </div>
+        <div class="navigation center">
+            <button class="btn btn-primary" id="startGameBtn" disabled>Start Game →</button>
+        </div>
+    </section>
+
+    <!-- Slide 2: Game and Scoring -->
+    <section id="gameSection" class="slide">
+        <header class="header">
+            <h1>🥏 Valle Scala Disc Golf</h1>
+            <div class="stage-info">
+                <span class="stage-number">Stage <span id="currentStage">1</span> of 6</span>
+                <span class="par-info">Par: <span id="currentPar">3</span></span>
+            </div>
+        </header>
+
+        <div class="scorecard-section">
+            <div class="scorecard-header">
+                <h3>Stage <span id="scorecardStage">1</span> Scoring</h3>
+                <div class="stage-par">Par <span id="scorecardPar">3</span></div>
+            </div>
+            <div id="scorecardTable" class="scorecard-table"></div>
+        </div>
+
+        <div class="navigation">
+            <button class="btn btn-nav" id="prevStageBtn" disabled>← Previous Stage</button>
+            <button class="btn btn-nav btn-primary" id="nextStageBtn">Next Stage →</button>
+        </div>
+
+        <button id="managePlayersBtn" class="btn btn-secondary manage-btn" title="Manage Players">⚙️ Manage Players</button>
+
+        <!-- Player Management Panel -->
+        <div id="playerManagementPanel" class="player-management-panel">
+            <h3>Manage Players</h3>
+            <div id="playersListManage" class="players-list"></div>
+            <button class="btn btn-secondary" id="closeManagementBtn">Close</button>
+        </div>
+    </section>
+
+    <!-- Slide 3: Summary and Final Scores -->
+    <section id="summarySection" class="slide">
+        <header class="header">
+            <h1>Game Finished!</h1>
+        </header>
+        <div class="summary-section show">
+            <h3>Final Scores</h3>
+            <div><strong>Total Par: <span id="totalParDisplay"></span> strokes</strong></div>
+            <div id="finalScores" class="final-scores"></div>
+            <div class="navigation center">
+                <button class="btn btn-primary" id="newGameBtn">Start New Game</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Add Player Modal (reuse from registration) -->
+    <div id="addPlayerModal" class="modal">
+        <div class="modal-content">
+            <h3>Add New Player</h3>
+            <input type="text" id="playerNameInput" placeholder="Enter player name" maxlength="15" />
+            <div class="modal-buttons">
+                <button class="btn btn-secondary" id="cancelAddPlayer">Cancel</button>
+                <button class="btn btn-primary" id="confirmAddPlayer">Add Player</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
