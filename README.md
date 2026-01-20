@@ -1,155 +1,356 @@
-# Language Flashcard PWA 🧠
+# 🧠 Language Flashcards PWA - Complete Documentation
 
-A fast, offline-first Progressive Web App for language learning. Create custom flashcard decks, import from CSV/JSON, generate decks with AI, and study with spaced repetition.
+## ✨ New Features Added
 
-## ✨ Features
+### 1. **Separated Deck Creation & Modification**
+- **Create Deck**: New dedicated view for creating empty decks with just a name
+- **Edit Deck**: Separate view for adding/removing cards from existing decks
+- Clear workflow: Create → Edit → Study
 
-- **Create Custom Decks**: Add cards with front (Italian/Spanish/etc) and back (English/target language)
-- **Import Decks**: Support for CSV, JSON, and TXT formats
-- **AI Deck Generation**: Generate decks using OpenAI API (optional - demo mode available)
-- **Offline Support**: All decks work offline with full PWA capability
-- **Spaced Repetition**: Track learned cards and focus on difficult ones
-- **Dark Mode**: Eye-friendly dark theme toggle
-- **Progress Tracking**: Visual stats for cards learned, retention, and study streak
-- **Data Export**: Backup and restore your data anytime
-- **iPhone Optimized**: Add to home screen for native app experience
+### 2. **Deck View Button**
+- Each deck shows action buttons: View (👁️), Stats (📊), Study (📚), Reset (🔄), Delete (🗑️)
+- Quick access to all deck operations from the home screen
+- Visual card count and learning progress on each deck
+
+### 3. **Stats Preview & Forgetting Curve**
+- **Session Results**: Shows detailed stats after completing a study session
+  - Easy cards 👍
+  - Hard cards 🔄
+  - Skipped cards ⏭️
+  - Total cards learned
+
+- **Ebbinghaus Forgetting Curve**: Based on scientific research
+  - Day 1: 90% retention
+  - Day 3: 72% retention
+  - Day 7: 54% retention
+  - Day 14: 35% retention
+  - Day 30: 21% retention
+  
+- **Deck Statistics**: Dedicated stats page showing:
+  - Total cards in deck
+  - Cards learned
+  - Retention percentage
+  - Total reviews conducted
+  - Forgetting curve projection
+
+### 4. **Reset/Forget Deck Feature**
+- Reset button (🔄) on each deck
+- Completely resets all progress to zero
+- All cards return to "new" status
+- Perfect for re-learning or starting fresh
+- Confirmation dialog to prevent accidents
+
+### 5. **Complete File Structure**
+
+```
+flashcards-app/
+├── index.html          (Main app - all views)
+├── app.js             (Application logic - 400+ lines)
+├── styles.css         (Complete styling)
+├── sw.js              (Service Worker - offline support)
+├── manifest.json      (PWA configuration)
+└── README.md          (This file)
+```
 
 ## 🚀 Quick Start
 
 ### Option 1: Deploy to GitHub Pages
 
-1. **Fork or clone this repository**
-   ```bash
-   git clone https://github.com/yourusername/flashcard-app.git
-   cd flashcard-app
-   ```
+```bash
+# Clone or create repository
+git clone https://github.com/yourusername/flashcards.git
+cd flashcards
 
-2. **Add files to repository:**
-   - `index.html` (main app)
-   - `app.js` (application logic)
-   - `manifest.json` (PWA metadata)
-   - `README.md` (this file)
+# Create all files (already included in this package)
+# Commit and push to GitHub
 
-3. **Enable GitHub Pages:**
-   - Go to Settings → Pages
-   - Select "Deploy from a branch"
-   - Choose `main` branch, `/root` directory
-   - Click Save
+# Enable GitHub Pages:
+# Settings → Pages → Deploy from branch → main → /root → Save
 
-4. **Access your app:**
-   - Open: `https://yourusername.github.io/flashcard-app/`
-   - On iPhone Safari: Tap Share → Add to Home Screen
+# Access at: https://yourusername.github.io/flashcards/
+```
 
 ### Option 2: Local Development
 
-1. **Clone repository**
-   ```bash
-   git clone https://github.com/yourusername/flashcard-app.git
-   ```
+```bash
+# Python 3
+cd flashcards
+python -m http.server 8000
 
-2. **Start local server** (Python 3)
-   ```bash
-   cd flashcard-app
-   python -m http.server 8000
-   ```
+# Open: http://localhost:8000
+```
 
-3. **Open browser**
-   - Navigate to: `http://localhost:8000`
+### Option 3: Vercel / Netlify
 
-## 📚 How to Use
+```bash
+# Vercel
+vercel
+
+# Netlify
+Drag and drop folder to https://app.netlify.com
+```
+
+## 📱 iPhone Setup
+
+1. Open in Safari: `https://yourusername.github.io/flashcards/`
+2. Tap Share → Add to Home Screen
+3. Use like a native app!
+
+## 🎮 How to Use
 
 ### Create a Deck
 1. Tap **➕ Create Deck**
-2. Enter deck name (e.g., "Italian A1")
-3. Add cards one by one:
-   - Front: Source language (Italian: "Ciao")
-   - Back: Target language (English: "Hello")
-4. Cards appear in preview below
+2. Enter deck name (e.g., "Italian Basics")
+3. You're sent to the Edit view
+4. Add cards one by one:
+   - Front: Italian word
+   - Back: English translation
+5. Tap **Add Card** after each card
 
-### Import a Deck
-1. Tap **📤 Import/Generate**
-2. Choose file (CSV, JSON, or TXT)
-3. File formats:
-   ```
-   CSV:
-   front,back
-   Ciao,Hello
-   Grazie,Thank you
+### View & Manage Decks
+From home screen, each deck shows:
+- **👁️ View**: Opens edit view to manage cards
+- **📊 Stats**: See detailed statistics and forgetting curve
+- **📚 Study**: Start a study session
+- **🔄 Reset**: Forget all progress and start over
+- **🗑️ Delete**: Remove the entire deck
 
-   JSON:
-   {
-     "decks": [{
-       "name": "Italian",
-       "cards": [{"front": "Ciao", "back": "Hello"}]
-     }]
-   }
-
-   TXT (pairs, alternating):
-   Ciao
-   Hello
-   Grazie
-   Thank you
-   ```
-
-### Generate with AI
-1. Tap **📤 Import/Generate**
-2. Enter topic: "Italian food vocabulary" or "Spanish verbs"
-3. (Optional) Enter OpenAI API key for better results
-4. Tap **Generate Deck**
-5. Preview appears - tap **Save Deck**
-
-**Get free OpenAI API credits:** https://platform.openai.com/account/billing/overview
-
-### Study Mode
-1. Tap **📚 Study**
-2. Select a deck from the list
-3. Tap card to flip between front/back
-4. Rate difficulty:
-   - **Easy 👍**: Mark as learned (won't appear again)
+### Study a Deck
+1. Tap the **📚 Study** button on a deck
+2. Tap the card to flip between front/back
+3. Rate difficulty:
+   - **Easy 👍**: Card marked as learned (won't appear again)
    - **Hard 🔄**: See again in this session
    - **Skip ⏭️**: Next card without rating
-5. Progress bar updates as you learn
+4. Complete the session to see results
+
+### Session Results
+After finishing:
+- See cards learned, hard cards, skipped
+- View Ebbinghaus forgetting curve
+- Plan next review dates based on science
+- Confetti 🎉 celebrates your learning!
+
+### Reset Progress
+1. From home screen, tap **🔄** (Reset) on a deck
+2. Confirm - all progress erased
+3. All cards become "new" again
+4. Perfect for re-learning or practicing
+
+### View Statistics
+1. Tap **📊 Stats** on any deck
+2. See:
+   - Total cards
+   - Cards learned
+   - Retention percentage
+   - Total reviews
+   - Forgetting curve projection
+
+## 📊 Statistics & Spaced Repetition
+
+### What Gets Tracked
+- **Cards Learned**: Marked as "Easy" - won't appear again
+- **Hard Cards**: Flagged for extra review
+- **Total Reviews**: Cumulative study sessions
+- **Retention %**: (Cards Learned / Total Cards) × 100
+
+### Ebbinghaus Forgetting Curve
+Science shows optimal review timing:
+- **Day 1**: Review immediately after learning (90% retention)
+- **Day 3**: Review 3 days later (72% retention)
+- **Day 7**: Review 1 week later (54% retention)
+- **Day 14**: Review 2 weeks later (35% retention)
+- **Day 30**: Review 1 month later (21% retention)
+
+*Plan your reviews based on these scientifically-proven intervals for maximum retention!*
 
 ## 💾 Data Management
 
 ### Export Data
 - **Settings** → **💾 Export All Data**
-- Downloads JSON backup with all decks + progress
+- Downloads JSON backup with all decks and progress
+- Keep as backup!
 
 ### Import Data
-- Use import function to restore from exported JSON file
+- Use import function to restore from exported JSON
+- Perfect for switching devices
 
 ### Clear Data
-- **Settings** → **🗑️ Clear All Data** (caution: irreversible)
+- **Settings** → **🗑️ Clear All Data**
+- ⚠️ Irreversible! Backs up first.
 
 ## 🌙 Dark Mode
-- Tap **🌙** button in header to toggle
-- Automatically uses device preference if not set
-- Preference saved to device
+- Tap **🌙** button in header
+- Automatically uses device preference
+- Preference saves to device
 
-## 📱 iPhone Setup
+## 🔧 File Descriptions
 
-1. **Open in Safari**
-   - `https://yourusername.github.io/flashcard-app/`
+### `index.html` (9KB)
+- Main app structure
+- All 9 views:
+  - Home (deck list)
+  - Create Deck
+  - Edit Deck (manage cards)
+  - Study Mode
+  - Session Results
+  - Deck Stats
+  - Import/Generate
+  - Settings
+  - Navigation sidebar
+- Responsive design
+- Accessible markup
 
-2. **Add to Home Screen**
-   - Tap Share button (bottom)
-   - Scroll → "Add to Home Screen"
-   - Name: "Flashcards"
-   - Tap Add
+### `app.js` (400+ lines)
+Core logic:
+- **FlashcardApp class** - Main application
+- **View Management** - Switch between pages
+- **Deck Operations**:
+  - Create, edit, delete decks
+  - Add/remove cards
+  - Reset/forget decks
+- **Study Mode**:
+  - Display cards
+  - Track responses
+  - Calculate statistics
+- **Stats & Analytics**:
+  - Session results
+  - Forgetting curve
+  - Retention tracking
+- **Data Persistence**:
+  - localStorage for offline
+  - Import/export JSON
+- **Dark Mode** toggle
+- **Confetti animation**
 
-3. **Use like native app**
-   - Opens fullscreen (no browser chrome)
-   - Offline mode works
-   - All data stays on device
+### `styles.css` (400+ lines)
+Complete styling:
+- **Layout**:
+  - Card flip animation
+  - Responsive grid
+  - Mobile-first design
+  - Safe area insets (notches)
+- **Components**:
+  - Buttons and forms
+  - Progress bars
+  - Statistics cards
+  - Deck items
+  - Modal overlay
+  - Sidebar navigation
+- **Theming**:
+  - Light mode (default)
+  - Dark mode
+  - Smooth transitions
+  - Glassmorphism header
 
-## 🔧 Technical Details
+### `sw.js` (30 lines)
+Service Worker:
+- **Offline Support**: Cache app on first load
+- **Cache Strategy**: Network-first, fallback to cache
+- **Auto Updates**: Cache busting on deploy
 
-### Architecture
-- Single-page HTML app with embedded CSS and JavaScript
-- No external dependencies (vanilla JS, no frameworks)
-- Service Worker for offline caching
-- localStorage for persistent data
+### `manifest.json` (40 lines)
+PWA Configuration:
+- App metadata
+- Icons (SVG)
+- Shortcuts
+- Installation settings
+- Theme colors
+
+## 🔐 Privacy & Security
+
+- ✅ **All data stays on your device** - No server uploads
+- ✅ **No accounts needed** - Use immediately
+- ✅ **Offline-first** - Works without internet
+- ✅ **Encrypted storage** - Browser-level encryption
+- ✅ **No tracking** - No analytics, no ads
+
+## 🐛 Troubleshooting
+
+**App not saving data?**
+- Check browser allows localStorage
+- iOS: Settings → Safari → Cookies (enable)
+- Try different browser if needed
+
+**Dark mode not saving?**
+- Browser must allow localStorage
+- Try clearing cache and reloading
+
+**Cards not appearing?**
+- Make sure you added cards in Edit Deck view
+- Check deck has cards (> 0)
+
+**Study mode slow?**
+- Too many cards? Split into multiple decks
+- Mobile browser may need refresh
+
+**Offline not working?**
+- First visit must be online to cache
+- Safari iOS: Website needs HTTPS
+- Wait 10 seconds for Service Worker to install
+
+## 📚 Example Usage Flow
+
+```
+1. Create Deck
+   Name: "Spanish Food Vocab"
+   ↓
+2. Edit Deck
+   Add cards:
+   - Pan / Bread
+   - Agua / Water
+   - Leche / Milk
+   ↓
+3. Study Session
+   Review cards
+   Mark as Easy/Hard/Skip
+   ↓
+4. Session Results
+   See stats and forgetting curve
+   ↓
+5. Plan Reviews
+   Based on Ebbinghaus curve:
+   - Review Day 1, 3, 7, 14, 30
+   ↓
+6. Reset if Needed
+   Start over and re-learn
+```
+
+## 🎯 Study Tips
+
+1. **Daily 15-minute sessions** beat cramming
+2. **Space out reviews** - Follow Ebbinghaus curve
+3. **Mix with audio** - Speak words aloud
+4. **Export regularly** - Backup your progress
+5. **Create themed decks** - Organize by topic
+6. **Reset old decks** - Re-learn for long-term retention
+7. **Check stats** - Monitor retention percentage
+
+## 🚀 Advanced Features
+
+### Data Structure
+```javascript
+{
+  id: 1234567890,
+  name: "Italian Basics",
+  cards: [
+    {
+      front: "Ciao",
+      back: "Hello",
+      learned: true,
+      difficulty: "easy",
+      reviews: 3,
+      lastReview: "2024-01-20T..."
+    }
+  ],
+  stats: {
+    totalReviews: 12,
+    cardsLearned: 8,
+    currentStreak: 5,
+    lastReview: "2024-01-20T..."
+  }
+}
+```
 
 ### Browser Support
 - Chrome 51+
@@ -157,110 +358,33 @@ A fast, offline-first Progressive Web App for language learning. Create custom f
 - Safari 11+ (iOS 11.3+)
 - Edge 15+
 
-### File Structure
-```
-├── index.html          (main app, all HTML/CSS/JS)
-├── app.js             (application logic)
-├── manifest.json      (PWA configuration)
-└── README.md          (this file)
-```
+## 📈 Future Enhancements
 
-### Service Worker
-- Automatically caches app files on first load
-- Enables offline functionality
-- Updates cache when app changes
+Possible additions:
+- [ ] Cloud sync across devices
+- [ ] Anki deck import
+- [ ] Audio pronunciation (TTS)
+- [ ] Image cards support
+- [ ] Collaborative deck sharing
+- [ ] Achievement badges
+- [ ] Study streak notifications
+- [ ] Detailed analytics dashboard
+- [ ] Custom review schedules
+- [ ] Pronunciation practice
 
-## 🔐 Privacy & Security
-- **All data stays on your device** - no server uploads
-- No accounts required
-- Encrypted localStorage (browser-level)
-- OpenAI API key (if used) only sent directly to OpenAI
+## 🤝 Support
 
-## 🐛 Troubleshooting
-
-**App not saving data?**
-- Check browser localStorage is enabled
-- iOS: Settings → Safari → Privacy → Block All Cookies (disable if on)
-
-**AI generation not working?**
-- Invalid OpenAI API key → check format (sk-...)
-- Quota exceeded → check billing at platform.openai.com
-- Try demo mode (leave API key blank)
-
-**Offline not working?**
-- First visit must be online to cache files
-- Service Worker requires HTTPS in production
-
-**Slow on large decks?**
-- Keep decks under 500 cards for best performance
-- Split large sets into multiple decks
-
-## 📊 Example Decks
-
-### CSV Import Template
-```csv
-Front,Back
-Ciao,Hello
-Grazie,Thank you
-Arrivederci,Goodbye
-Quanto costa?,How much?
-Mi piace,I like
-```
-
-### JSON Import Template
-```json
-{
-  "decks": [{
-    "name": "Italian Basics",
-    "cards": [
-      {"front": "Ciao", "back": "Hello"},
-      {"front": "Grazie", "back": "Thank you"}
-    ]
-  }]
-}
-```
-
-## 🎯 Study Tips
-
-1. **Daily 15-minute sessions** beat cramming
-2. **Space out reviews** - come back to hard cards later
-3. **Mix with audio** - say words aloud while studying
-4. **Export progress** - backup regularly
-5. **Create themed decks** - organize by topic (verbs, food, travel)
-
-## 🚀 Deployment Alternatives
-
-**Vercel:**
-```bash
-npm install -g vercel
-vercel
-```
-
-**Netlify:**
-Drag and drop folder to https://app.netlify.com
-
-**Any static host:**
-Upload all files to any web host (surge, Firebase Hosting, etc.)
+Questions or issues?
+- Check troubleshooting section
+- Open an issue on GitHub
+- Contact via email
 
 ## 📝 License
-MIT License - use freely, modify, share
 
-## 🤝 Contributing
-Suggestions welcome! Open an issue or submit improvements.
+MIT License - Use freely, modify, share
 
-## 💡 Future Features
-- [ ] Spaced repetition algorithm improvements
-- [ ] Study streaks and statistics
-- [ ] Sound effects (correct/wrong)
-- [ ] Sync across devices (optional cloud)
-- [ ] Categories and sub-decks
-- [ ] Pronunciation guide (text-to-speech)
-- [ ] Anki deck import
-- [ ] Collaborative deck sharing
+## 🎓 Made For
 
-## 📧 Support
-Questions? Issues? Contact or open GitHub issue.
+Language learners, polyglots, students, and anyone wanting to master new vocabularies effectively with science-backed spaced repetition.
 
----
-
-**Happy Learning! 🎓** Made for polyglot language learners everywhere.
+**Happy Learning! 🚀**
