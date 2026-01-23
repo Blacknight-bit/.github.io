@@ -1313,7 +1313,14 @@ body.dark hr {
     margin: var(--space-10) 0;
     border: 1px solid rgba(var(--color-error-rgb), var(--status-border-opacity));
 }
-
+.info-message {
+    background: rgba(var(--color-info-rgb), var(--status-bg-opacity));
+    color: var(--color-info);
+    padding: var(--space-12);
+    border-radius: var(--radius-base);
+    margin: var(--space-10) 0;
+    border: 1px solid rgba(var(--color-info-rgb), var(--status-border-opacity));
+}
 /* Statistics Specific Styles */
 .stats-grid {
     display: grid;

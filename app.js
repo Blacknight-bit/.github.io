@@ -27,13 +27,18 @@ class FlashcardApp {
     }
 
     // ===== View Management =====
-    showView(viewName) {
+        showView(viewName) {
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
         document.getElementById(viewName).classList.add('active');
         
         // Close sidebar when switching views
         document.querySelector('.sidebar').classList.remove('open');
         document.querySelector('.overlay').classList.remove('show');
+
+        // Reset card form when leaving edit deck view
+        if (viewName !== 'editDeck') {
+            this.resetCardForm();
+        }
 
         // Load analytics if needed
         if (viewName === 'analytics') {
@@ -78,10 +83,15 @@ class FlashcardApp {
             this.createDeck();
         });
 
-        // Add card to deck form
+                // Add/Modify card form
         document.getElementById('addCardForm').addEventListener('submit', (e) => {
             e.preventDefault();
             this.addCard();
+        });
+
+        // Cancel modify button
+        document.getElementById('cancelModifyBtn').addEventListener('click', () => {
+            this.cancelModify();
         });
 
         // Rename deck buttons
@@ -174,7 +184,7 @@ class FlashcardApp {
         document.getElementById('deckName').value = '';
     }
 
-    updateEditDeckView() {
+        updateEditDeckView() {
         if (!this.currentDeck) return;
 
         document.getElementById('editDeckTitle').textContent = this.currentDeck.name;
@@ -188,8 +198,16 @@ class FlashcardApp {
                 <div class="deck-info">
                     <div class="deck-name">${this.escapeHtml(card.front)}</div>
                     <div class="deck-count">${this.escapeHtml(card.back)}</div>
+                    <div style="font-size: 12px; color: #999; margin-top: 4px;">
+                        ${card.learned ? '✅ Learned' : '📚 Needs practice'} 
+                        • Reviews: ${card.reviews}
+                        ${card.lastReview ? `• Last: ${new Date(card.lastReview).toLocaleDateString()}` : ''}
+                    </div>
                 </div>
-                <button class="icon-btn" onclick="app.deleteCard(${index})">🗑️</button>
+                <div class="deck-actions">
+                    <button class="icon-btn" title="Modify" onclick="app.modifyCard(${index})">✏️</button>
+                    <button class="icon-btn" title="Delete" onclick="app.deleteCard(${index})">🗑️</button>
+                </div>
             `;
             cardsList.appendChild(cardEl);
         });
@@ -197,31 +215,40 @@ class FlashcardApp {
         document.getElementById('cardCount').textContent = `Cards: ${this.currentDeck.cards.length}`;
     }
 
-    addCard() {
+        addCard() {
         if (!this.currentDeck) return;
 
         const front = document.getElementById('cardFront').value.trim();
         const back = document.getElementById('cardBack').value.trim();
+        const modifyingIndex = parseInt(document.getElementById('modifyingCardIndex').value);
 
         if (!front || !back) {
             alert('Please fill in both fields');
             return;
         }
 
-        this.currentDeck.cards.push({
-            front: front,
-            back: back,
-            learned: false,
-            difficulty: 'new',
-            reviews: 0,
-            lastReview: null,
-            nextReviewDate: new Date().toISOString()
-        });
+        if (modifyingIndex !== -1 && modifyingIndex < this.currentDeck.cards.length) {
+            // Update existing card
+            this.currentDeck.cards[modifyingIndex].front = front;
+            this.currentDeck.cards[modifyingIndex].back = back;
+            this.showTempMessage('Card updated successfully!', 'success');
+        } else {
+            // Add new card
+            this.currentDeck.cards.push({
+                front: front,
+                back: back,
+                learned: false,
+                difficulty: 'new',
+                reviews: 0,
+                lastReview: null,
+                nextReviewDate: new Date().toISOString()
+            });
+            this.showTempMessage('Card added successfully!', 'success');
+        }
 
         this.saveDecks();
         this.updateEditDeckView();
-        document.getElementById('cardFront').value = '';
-        document.getElementById('cardBack').value = '';
+        this.resetCardForm();
     }
 
     deleteCard(index) {
@@ -231,6 +258,63 @@ class FlashcardApp {
             this.updateEditDeckView();
         }
     }
+            // ===== Card Modification Features =====
+    modifyCard(index) {
+        if (!this.currentDeck || index < 0 || index >= this.currentDeck.cards.length) return;
+
+        const card = this.currentDeck.cards[index];
+        
+        // Fill form with existing card data
+        document.getElementById('cardFront').value = card.front;
+        document.getElementById('cardBack').value = card.back;
+        document.getElementById('modifyingCardIndex').value = index;
+        
+        // Change button text and show cancel button
+        document.getElementById('addCardBtn').textContent = 'Update Card';
+        document.getElementById('cancelModifyBtn').style.display = 'block';
+        
+        // Scroll to form
+        document.getElementById('cardFormContainer').scrollIntoView({ behavior: 'smooth' });
+        document.getElementById('cardFront').focus();
+    }
+
+    cancelModify() {
+        this.resetCardForm();
+    }
+
+    resetCardForm() {
+        document.getElementById('cardFront').value = '';
+        document.getElementById('cardBack').value = '';
+        document.getElementById('modifyingCardIndex').value = '-1';
+        document.getElementById('addCardBtn').textContent = 'Add Card';
+        document.getElementById('cancelModifyBtn').style.display = 'none';
+    }
+
+    showTempMessage(message, type = 'info') {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = type === 'success' ? 'success-message' : 'info-message';
+        messageDiv.textContent = message;
+        messageDiv.style.position = 'fixed';
+        messageDiv.style.top = '20px';
+        messageDiv.style.left = '50%';
+        messageDiv.style.transform = 'translateX(-50%)';
+        messageDiv.style.zIndex = '10000';
+        messageDiv.style.padding = '12px 24px';
+        messageDiv.style.borderRadius = '8px';
+        messageDiv.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+        messageDiv.style.maxWidth = '90%';
+        messageDiv.style.textAlign = 'center';
+        
+        document.body.appendChild(messageDiv);
+        
+        setTimeout(() => {
+            messageDiv.style.opacity = '0';
+            messageDiv.style.transform = 'translateX(-50%) translateY(-20px)';
+            messageDiv.style.transition = 'all 0.3s ease';
+            setTimeout(() => document.body.removeChild(messageDiv), 300);
+        }, 2000);
+    }
+    
 
     selectDeckFromList(deckId) {
         this.currentDeck = this.decks.find(d => d.id === deckId);
